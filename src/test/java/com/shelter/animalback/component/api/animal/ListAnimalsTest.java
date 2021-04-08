@@ -1,10 +1,12 @@
-package com.shelter.animalback.component.api;
+package com.shelter.animalback.component.api.animal;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.shelter.animalback.domain.Animal;
 import com.shelter.animalback.model.AnimalDao;
 import com.shelter.animalback.repository.AnimalRepository;
 import lombok.SneakyThrows;
+import org.everit.json.schema.loader.SchemaLoader;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.json.JSONTokener;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,7 +27,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 @AutoConfigureMockMvc
-public class AnimalDetailTest {
+public class ListAnimalsTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -36,15 +38,14 @@ public class AnimalDetailTest {
     @BeforeEach
     @SneakyThrows
     public void setUp() {
-
         var cat = new AnimalDao("Thor", "Birmano", "Male", false);
         animalRepository.save(cat);
     }
 
     @Test
     @SneakyThrows
-    public void animaDetailWithSuccessStatusCodeAndContentType() {
-        var response = mockMvc.perform(get("/animals/Thor")).andReturn().getResponse();
+    public void listAnimalsSuccessfully() {
+        var response = mockMvc.perform(get("/animals")).andReturn().getResponse();
 
         assertThat(response.getStatus(),equalTo(HttpStatus.OK.value()));
         assertThat(response.getContentType(), equalTo(MediaType.APPLICATION_JSON.toString()));
@@ -52,13 +53,13 @@ public class AnimalDetailTest {
 
     @Test
     @SneakyThrows
-    public void detailWithTheRightAnimal() {
-        var response = mockMvc.perform(get("/animals/Thor")).andReturn().getResponse();
-        var animal = new ObjectMapper().readValue(response.getContentAsString(), Animal.class);
+    public void listAnimalsWithRightSchema() {
+        var response = mockMvc.perform(get("/animals")).andReturn().getResponse();
 
-        assertThat(animal.getName(), equalTo("Thor"));
-        assertThat(animal.getBreed(), equalTo("Birmano"));
-        assertThat(animal.getGender(), equalTo("Male"));
-        assertThat(animal.isVaccinated(), equalTo(false));
+        var jsonSchema = new JSONObject(new JSONTokener(ListAnimalsTest.class.getResourceAsStream("/animals.json")));
+        var jsonArray = new JSONArray(response.getContentAsString());
+
+        var schema = SchemaLoader.load(jsonSchema);
+        schema.validate(jsonArray);
     }
 }
