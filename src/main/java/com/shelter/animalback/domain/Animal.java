@@ -11,8 +11,10 @@ public class Animal {
     private String gender;
     private boolean isVaccinated;
     private String[] vaccines;
+    private Long id;
 
-    public Animal(String name, String breed, String gender, boolean isVaccinated, String[] vaccines) {
+    public Animal(Long id,String name, String breed, String gender, boolean isVaccinated, String[] vaccines) {
+        this.id = id;
         this.name = name;
         this.breed = breed;
         this.gender = gender;
