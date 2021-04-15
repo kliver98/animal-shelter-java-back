@@ -18,7 +18,7 @@ public class AnimalDao {
     @SequenceGenerator(name="ANIMAL_GENERATOR", sequenceName = "ANIMAL_SEQ", allocationSize = 1)
     private Long id;
 
-    @Column(unique = true)
+    @Column(unique = true, length = 10)
     private String name;
 
     private String breed;

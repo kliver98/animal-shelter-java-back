@@ -31,7 +31,7 @@ public class AnimalDataBaseTest {
         var animal = new AnimalDao("Hela","Mestiza","Female",true);
         var animalDb= animalRepository.save(animal);
 
-        assertThat(animalDb.getName(), equalTo("Hela"));
+        assertThat(animalDb.getName(), equalTo("ThisIsMyLongName"));
         assertThat(animalDb.getBreed(), equalTo("Mestiza"));
         assertThat(animalDb.getGender(), equalTo("Female"));
         assertThat(animalDb.isVaccinated(), equalTo(true));
