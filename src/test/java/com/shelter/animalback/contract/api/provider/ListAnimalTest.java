@@ -46,7 +46,7 @@ public class ListAnimalTest {
     }
 
     @State("has animals")
-    public void verifyListAnimal() {
+    public void addAnimal() {
         Animal animal = new Animal();
         animal.setName("Catto");
         animal.setGender("Male");
