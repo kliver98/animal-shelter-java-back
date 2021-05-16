@@ -21,7 +21,6 @@ import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
@@ -42,7 +41,7 @@ public class SaveAnimalTest {
     @SneakyThrows
     public void createAnimalSuccessful() {
         var animal = new CreateAnimalRequestBody();
-        animal.setName("ThisIsMyLongName");
+        animal.setName("ThisIs");
         animal.setBreed("Mestizo");
         animal.setGender("Female");
         animal.setVaccinated(true);
@@ -60,18 +59,16 @@ public class SaveAnimalTest {
                 new ObjectMapper().readValue(response.getContentAsString(), CreateAnimalResponse.class);
 
         // Asserts Http Response
-        assertThat(animalResponse.getName(), equalTo("ThisIsMyLongName"));
+        assertThat(animalResponse.getName(), equalTo("ThisIs"));
         assertThat(animalResponse.getBreed(), equalTo("Mestizo"));
         assertThat(animalResponse.getGender(), equalTo("Female"));
         assertThat(animalResponse.isVaccinated(), equalTo(true));
-        assertThat(animalResponse.getId(), notNullValue());
 
         // Database Asserts
-        var dbQuery = animalRepository.findById(animalResponse.getId());
-        assertThat(dbQuery.isPresent(), is(true));
+        var animalDB = animalRepository.findByName(animalResponse.getName());
+        assertThat(animalDB, notNullValue() );
 
-        var animalDB = dbQuery.get();
-        assertThat(animalDB.getName(), equalTo("ThisIsMyLongName"));
+        assertThat(animalDB.getName(), equalTo("ThisIs"));
         assertThat(animalDB.getBreed(), equalTo("Mestizo"));
         assertThat(animalDB.getGender(), equalTo("Female"));
         assertThat(animalDB.isVaccinated(), equalTo(true));
@@ -91,7 +88,6 @@ public class SaveAnimalTest {
     @Setter
     @NoArgsConstructor
     private static class CreateAnimalResponse {
-        private Long id;
         private String name;
         private String breed;
         private String gender;
