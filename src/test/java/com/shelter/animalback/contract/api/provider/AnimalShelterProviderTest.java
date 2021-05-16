@@ -23,8 +23,8 @@ import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @PactBroker(
-        url = "https://kliver.pactflow.io",
-        authentication = @PactBrokerAuth(token = "o_LuEXBkiyB-YbNwUiUjUA")
+        url = "${{ secrets.PACT_BROKER_BASE_URL }}",
+        authentication = @PactBrokerAuth(token = "${{ secrets.PACT_BROKER_TOKEN }}")
 )
 @Provider("AnimalShelterBack")
 @ExtendWith(MockitoExtension.class)
