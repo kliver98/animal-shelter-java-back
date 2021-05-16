@@ -56,7 +56,7 @@ public class AnimalController {
             return new ResponseEntity<AnimalDto>(map(animal), HttpStatus.CREATED);
 
         } catch (Exception ex) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(String.format("The animal called %s has already been created", animalDto.getName()));
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(String.format(" The animal called %s has already been created", animalDto.getName()));
         }
     }
 
@@ -74,7 +74,6 @@ public class AnimalController {
 
     private AnimalDto map(Animal animal) {
         return new AnimalDto(
-                animal.getId(),
                 animal.getName(),
                 animal.getBreed(),
                 animal.getGender(),
@@ -88,12 +87,11 @@ public class AnimalController {
                 dto.getBreed(),
                 dto.getGender(),
                 dto.isVaccinated(),
-                dto.getVaccines());
+                dto.getVaccines() == null ? new String[0] : dto.getVaccines());
     }
 
     private Animal map(UpdateAnimalBodyDto dto) {
         return new Animal(
-                dto.getId(),
                 dto.getName(),
                 dto.getBreed(),
                 dto.getGender(),

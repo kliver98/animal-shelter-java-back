@@ -1,9 +1,6 @@
 name: Java CI with Gradle
 
 on:
-  push:
-    branches:
-      - '**'
   pull_request:
     branches: [ main ]
 
@@ -23,6 +20,11 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew build -x test
       - name: Run component tests
-        run: ./gradlew test --tests "com.shelter.animalback.component.api.*"
+        run: ./gradlew test --tests "com.shelter.animalback.component.*"
       - name: Run integration tests
-        run: ./gradlew test --tests "com.shelter.animalback.integration.*"
+          run: ./gradlew test --tests "com.shelter.animalback.integration.*"
+      - name: Run contract tests
+          env:
+            PACT_BROKER_URL: ${{ secrets.PACT_BROKER_URL }}
+            PACT_BROKER_TOKEN: ${{ secrets.PACT_BROKER_TOKEN }}
+          run: ./gradlew test --tests "com.shelter.animalback.contract.*"

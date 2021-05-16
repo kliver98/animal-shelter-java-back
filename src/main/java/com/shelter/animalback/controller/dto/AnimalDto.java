@@ -8,15 +8,13 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class AnimalDto {
-    private long id;
     private String name;
     private String breed;
     private String gender;
     private boolean vaccinated;
     private String[] vaccines;
 
-    public AnimalDto(long id, String name, String breed, String gender, boolean vaccinated, String[] vaccines) {
-        this.id = id;
+    public AnimalDto(String name, String breed, String gender, boolean vaccinated, String[] vaccines) {
         this.name = name;
         this.breed = breed;
         this.gender = gender;
