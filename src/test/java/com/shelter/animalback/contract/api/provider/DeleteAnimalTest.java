@@ -20,6 +20,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 @PactBroker(host = "kliver.pactflow.io", scheme = "https",
         authentication = @PactBrokerAuth(token = "o_LuEXBkiyB-YbNwUiUjUA"))
 @Provider("AnimalShelterBack")
@@ -45,19 +47,13 @@ public class DeleteAnimalTest {
         context.setTarget(testTarget);
     }
 
-    @State("has animals")
-    public void addAnimal() {
-        Animal animal = new Animal();
-        animal.setName("Catto");
-        animal.setGender("Male");
-        animal.setBreed("Siames");
-        animal.setVaccinated(false);
-
-        ArrayList<Animal> animals = new ArrayList<Animal>();
-        animals.add(animal);
-
-        Mockito.when(animalService.getAll()).thenReturn(animals);
-
+    @State("has no animal")
+    public void whithoutAnimal() {
+        String name = "not_exist";
+        Mockito.doAnswer((i) -> {
+            assertEquals(name, i.getArgument(0));
+            return null;
+        }).when(animalService).delete(name);
     }
 
 }
