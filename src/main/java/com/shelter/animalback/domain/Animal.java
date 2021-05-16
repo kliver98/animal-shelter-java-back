@@ -9,14 +9,14 @@ public class Animal {
     private String name;
     private String breed;
     private String gender;
-    private boolean isVaccinated;
+    private boolean vaccinated;
     private String[] vaccines;
 
-    public Animal(String name, String breed, String gender, boolean isVaccinated, String[] vaccines) {
+    public Animal(String name, String breed, String gender, boolean vaccinated, String[] vaccines) {
         this.name = name;
         this.breed = breed;
         this.gender = gender;
-        this.isVaccinated = isVaccinated;
+        this.vaccinated = vaccinated;
         this.vaccines = vaccines;
     }
 }
