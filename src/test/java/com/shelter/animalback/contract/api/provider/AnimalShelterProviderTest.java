@@ -20,11 +20,15 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 
-@PactBroker(host = "kliver.pactflow.io", scheme = "https",
-authentication = @PactBrokerAuth(token = "o_LuEXBkiyB-YbNwUiUjUA"))
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+@PactBroker(
+        url = "${PACT_BROKER_BASE_URL}",
+        authentication = @PactBrokerAuth(token = "${PACT_BROKER_TOKEN}")
+)
 @Provider("AnimalShelterBack")
 @ExtendWith(MockitoExtension.class)
-public class ListAnimalTest {
+public class AnimalShelterProviderTest {
 
     @Mock
     private AnimalService animalService;
@@ -45,8 +49,8 @@ public class ListAnimalTest {
         context.setTarget(testTarget);
     }
 
-    @State("has animals")
-    public void addAnimal() {
+    @State("has animals and want to list them")
+    public void addAnimals() {
         Animal animal = new Animal();
         animal.setName("Catto");
         animal.setGender("Male");
@@ -57,7 +61,26 @@ public class ListAnimalTest {
         animals.add(animal);
 
         Mockito.when(animalService.getAll()).thenReturn(animals);
+    }
 
+    @State("create a new animal")
+    public void newAnimal() {
+        Animal animal = new Animal();
+        animal.setName("Manchitas");
+        animal.setGender("Female");
+        animal.setBreed("Bengali");
+        animal.setVaccinated(true);
+
+        Mockito.when(animalService.save(Mockito.any(Animal.class))).thenReturn(animal);
+    }
+
+    @State("delete animal that does not exist")
+    public void whithoutAnimal() {
+        String name = "not_exist";
+        Mockito.doAnswer((i) -> {
+            assertEquals(name, i.getArgument(0));
+            return null;
+        }).when(animalService).delete(name);
     }
 
 }
