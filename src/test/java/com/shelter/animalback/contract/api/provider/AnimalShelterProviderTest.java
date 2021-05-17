@@ -74,9 +74,9 @@ public class AnimalShelterProviderTest {
         Mockito.when(animalService.save(Mockito.any(Animal.class))).thenReturn(animal);
     }
 
-    @State("delete animal that does not exist")
+    @State("exists at least default animal, Manchas")
     public void whithoutAnimal() {
-        String name = "not_exist";
+        String name = "Manchas";
         Mockito.doAnswer((i) -> {
             assertEquals(name, i.getArgument(0));
             return null;
